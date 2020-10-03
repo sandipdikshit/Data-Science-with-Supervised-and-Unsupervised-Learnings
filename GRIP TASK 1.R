@@ -1,0 +1,8 @@
+View(GRIP1)
+library(readxl)
+library(coefplot)
+regressionmodel1=lm(GRIP1$Hours~GRIP1$Scores)
+summary(regressionmodel1)
+plot(GRIP1$Hours~GRIP1$Scores)
+abline(regressionmodel1)
+coefplot(regressionmodel1)
