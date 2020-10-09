@@ -1,0 +1,40 @@
+#Open Package conjoint
+library(conjoint)
+library(xlsx)
+#Enter attributes and its levels
+experiment=expand.grid(OS=c("iOS","Windows","Android"),Price=c("<10K","10k-20K","20K-30K","30K-40K",">40K"),Camera=c("5-10MP","11MP-15MP","16MP-20MP","21MP-35MP",">35MP"))
+#Design the combination of product attributes using Orthogonal Design
+orthogonaldesign=caFactorialDesign(data = experiment,type = "orthogonal")
+#View Orthogonal design combinations
+print(orthogonaldesign)
+#Structure of orthogonal design  
+str(orthogonaldesign)
+#Encode the design combinations
+code=caEncodedDesign(orthogonaldesign)
+#View Coded Orthogonal design combinations
+print(code)
+#Save orthogonal design in .csv File
+write.csv(orthogonaldesign,file = "orthogonal.csv")
+#Save encoded orthogonal design in .csv File
+write.csv(code,file = "encoded.csv",row.names = FALSE)
+#Set working directory
+setwd("E:\0 MBA\R-Conjoint")
+#Save your conjoint orthogonal design data along with encoded data in same excel sheet
+#Make sure your sheet 1 consist of Survey data and Sheet 2 consists of conjoint orthogonal design data along with encoded data
+#Import/Open sheet 1 survey data
+mydatasurvey=read.csv("Conjoint Data survey for R.xlsx",1,keepFormulas = FALSE)
+#Import/Open sheet 2 conjoint design data
+mydataconj=read.xlsx("Conjoint Data survey for R.xlsx",2,keepFormulas = FALSE)
+#label levels of each attributes
+lev=c("iOS","Windows","Android","<10K","10k-20K","20K-30K","30K-40K",">40K","5-10MP","11MP-15MP","16MP-20MP","21MP-35MP",">35MP")
+#Create dataframe of attributes
+lev.df=data.frame(lev)
+#Conjoint Model
+caModel(y=mydatasurvey[1,2:26],x=mydataconj[,5:7])
+caUtilities(y=Survey[,2:26],x=conjdata[,5:7],z=lev.df)
+Conjoint(y=mydatasurvey[,2:26],x=mydataconj[,5:7],z=lev.df)
+#Important Atttributes
+caImportance(mydatasurvey[,2:26],mydataconj[,5:7])
+#Segmentation of attributes
+caSegmentation(mydatasurvey[,2:26],mydataconj[,5:7],c=3)
+
